@@ -7,6 +7,7 @@ LIB=$CWD/../lib
 VAR=$CWD/../var
 OUT=$CWD/../out
 PORT=2000
+DEPLOY=""
 DEPLOYMENT_OUTPUT=json
 TEMPLATE=""
 
@@ -14,7 +15,7 @@ TEMPLATE=""
 otherargs=()
 while [[ "$#" > 0 ]]; do case $1 in
   --ci) ci=1;;
-  -d|--deploy) deploy=1;;
+  -d|--deploy) DEPLOY="${2:-dai}";;
   -o|--output) DEPLOYMENT_OUTPUT="$2"; shift;;
   --fast) fast=1;;
   -p|--port) PORT="$2"; shift;;
@@ -22,6 +23,18 @@ while [[ "$#" > 0 ]]; do case $1 in
   --template) TEMPLATE="$2"; shift;;
   *) otherargs+=($1);;
 esac; shift; done
+
+if [ -z "$DEPLOY" ]; then
+  echo "Please specify deployment case. [dai|mcd]"
+  exit 1
+fi
+
+DEPLOY_DIR=$CWD/../deploy/$DEPLOY
+
+if [ ! -d "$DEPLOY_DIR" ]; then 
+  echo "Non existing deployemnt dir: $DEPLOY_DIR"
+  exit 1
+fi
 
 # Check if a testnet is already running
 if ! nc -z 127.0.0.1 $PORT; then
@@ -85,11 +98,11 @@ if ! nc -z 127.0.0.1 $PORT; then
   export ETH_FROM=$(seth rpc eth_coinbase)
 
   # Deploy contracts
-  if [ $deploy ]; then
+  if [ ! -z $DEPLOY ]; then
     if [ "$SKIP_BUILD_IF_ALREADY_BUILT" ]; then
       echo "Skipping build of dapps that are already built."
     fi
-    $CWD/deploy -p "$PORT" -o "$DEPLOYMENT_OUTPUT" --template "$TEMPLATE"
+    $DEPLOY_DIR/deploy -p "$PORT" -o "$DEPLOYMENT_OUTPUT" --template "$TEMPLATE"
   fi
 
   END_TIME=`date +%s`

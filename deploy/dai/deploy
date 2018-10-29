@@ -2,8 +2,8 @@
 set -e
 
 CWD="${0%/*}"
-LIB=$CWD/../lib
-OUT=$CWD/../out
+LIB=$CWD/../../lib
+OUT=$CWD/../../out
 DEPLOYMENT_OUTPUT=json
 TEMPLATE=""
 PORT=2000
