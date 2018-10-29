@@ -1,4 +1,8 @@
-; dai.js submodules
+; mcd modules
+[submodule "lib/dss-deploy"]
+	path = lib/dss-deploy
+	url = https://github.com/makerdao/dss-deploy.git
+; dai.js modules
 [submodule "lib/ds-test"]
 	path = lib/ds-test
 	url = https://github.com/dapphub/ds-test
@@ -17,8 +21,3 @@
 [submodule "lib/proxy-registry"]
 	path = lib/proxy-registry
 	url = https://github.com/makerdao/proxy-registry
-
-; mcd submodules
-[submodule "lib/dss-deploy"]
-	path = lib/dss-deploy
-	url = https://github.com/makerdao/dss-deploy.git
